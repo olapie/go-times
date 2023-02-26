@@ -1,14 +1,13 @@
-package timex
+package times
 
 import (
 	"database/sql"
 	"database/sql/driver"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"strings"
 	"time"
-
-	"code.olapie.com/conv"
 )
 
 var (
@@ -262,9 +261,18 @@ const (
 )
 
 func (r *Range) Scan(src interface{}) error {
-	s, err := conv.ToString(src)
-	if err != nil {
-		return err
+	var err error
+	var s string
+	if str, ok := src.(string); ok {
+		s = str
+	} else if stringer, ok := src.(fmt.Stringer); ok {
+		s = stringer.String()
+	} else if stringer, ok := src.(fmt.GoStringer); ok {
+		s = stringer.GoString()
+	} else if b, ok := src.([]byte); ok {
+		s = string(b)
+	} else {
+		return errors.New(fmt.Sprintf("not string: %T", src))
 	}
 
 	if s == "" {
@@ -349,7 +357,6 @@ func (r *Range) PrevRepeat(repeat Repeat) *Range {
 }
 
 func (r *Range) RelativeText() string {
-	hans := IsSimplifiedChinese()
 	begin, end := r.BeginT(), r.EndT()
 	beginText := begin.Date().ShortText()
 	if !begin.IsBeginOfDay() {
@@ -362,22 +369,13 @@ func (r *Range) RelativeText() string {
 	if r.InDay() {
 		switch {
 		case r.IsAllDay():
-			if hans {
-				return beginText + "全天"
-			}
-			return beginText + " all day"
+			return beginText + "" + Localize("all day")
 		case begin.Equals(end):
 			return beginText
 		case begin.IsBeginOfDay():
-			if hans {
-				return endText + " 结束"
-			}
-			return endText + " ends"
+			return endText + " " + Localize("ends")
 		case end.IsEndOfDay():
-			if hans {
-				return beginText + " 开始"
-			}
-			return beginText + " begins"
+			return beginText + " " + Localize("begins")
 		default:
 			return beginText + " - " + strings.ToLower(end.TimeText())
 		}

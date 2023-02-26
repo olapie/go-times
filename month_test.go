@@ -1,58 +1,56 @@
-package timex_test
+package times
 
 import (
 	"testing"
-
-	"code.olapie.com/timex"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 )
 
 func TestMonth_NumOfWeeks(t *testing.T) {
 	tests := []struct {
-		Month      *timex.Month
+		Month      *Month
 		NumOfWeeks int
 	}{
-		{timex.NewMonth(2020, 6),
+		{NewMonth(2020, 6),
 			5,
-		}, {timex.NewMonth(2020, 7),
+		}, {NewMonth(2020, 7),
 			5,
-		}, {timex.NewMonth(2020, 8),
+		}, {NewMonth(2020, 8),
 			6,
-		}, {timex.NewMonth(2020, 9),
+		}, {NewMonth(2020, 9),
 			5,
 		},
 	}
 
 	for _, te := range tests {
-		assert.Equal(t, te.NumOfWeeks, te.Month.NumOfWeeks(), te.Month)
+		if te.NumOfWeeks != te.Month.NumOfWeeks() {
+			t.Fatal(te.NumOfWeeks, te.Month.NumOfWeeks(), te.Month)
+		}
 	}
 }
 
 func TestMonth_GetCalendarDate(t *testing.T) {
 	tests := []struct {
-		Month *timex.Month
+		Month *Month
 		Week  int
 		Day   int
-		Date  *timex.Date
+		Date  *Date
 	}{
-		{timex.NewMonth(2020, 9),
+		{NewMonth(2020, 9),
 			1,
 			3,
-			timex.NewDate(2020, 9, 1),
-		}, {timex.NewMonth(2020, 9),
+			NewDate(2020, 9, 1),
+		}, {NewMonth(2020, 9),
 			4,
 			1,
-			timex.NewDate(2020, 9, 20),
-		}, {timex.NewMonth(2020, 9),
+			NewDate(2020, 9, 20),
+		}, {NewMonth(2020, 9),
 			5,
 			4,
-			timex.NewDate(2020, 9, 30),
-		}, {timex.NewMonth(2020, 9),
+			NewDate(2020, 9, 30),
+		}, {NewMonth(2020, 9),
 			1,
 			1,
 			nil,
-		}, {timex.NewMonth(2020, 9),
+		}, {NewMonth(2020, 9),
 			5,
 			7,
 			nil,
@@ -64,8 +62,15 @@ func TestMonth_GetCalendarDate(t *testing.T) {
 		if date == te.Date {
 			continue
 		}
-		require.NotEmpty(t, date, te.Month.String(), te.Week, te.Day)
-		require.NotEmpty(t, te.Date)
-		assert.True(t, date.Equals(te.Date))
+		if date == nil {
+			t.Fatal(te.Month.String(), te.Week, te.Day)
+		}
+		if te.Date == nil {
+			t.FailNow()
+		}
+
+		if !date.Equals(te.Date) {
+			t.Fatal(date.String(), te.Date.String())
+		}
 	}
 }

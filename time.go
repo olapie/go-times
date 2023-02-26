@@ -1,4 +1,4 @@
-package timex
+package times
 
 import (
 	"time"
@@ -48,12 +48,15 @@ const (
 )
 
 var enWeekdaySymbols = [7]string{"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"}
-var hansWeekdaySymbols = [7]string{"周日", "周一", "周二", "周三", "周四", "周五", "周六"}
 
 func GetWeekdaySymbol(d int) string {
 	d = d % 7
-	if IsSimplifiedChinese() {
-		return hansWeekdaySymbols[d]
+	return Localize(enWeekdaySymbols[d])
+}
+
+func abs[T ~int64](num T) T {
+	if num < 0 {
+		return -num
 	}
-	return enWeekdaySymbols[d]
+	return num
 }

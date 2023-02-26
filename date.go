@@ -1,12 +1,10 @@
-package timex
+package times
 
 import (
 	"database/sql/driver"
 	"encoding"
 	"fmt"
 	"time"
-
-	"code.olapie.com/conv"
 )
 
 var (
@@ -122,17 +120,9 @@ func (d *Date) String() string {
 }
 
 func (d *Date) PrettyText() string {
-	var s string
-	if IsSimplifiedChinese() {
-		s = fmt.Sprintf("%d月%d日", d.month, d.day)
-	} else {
-		s = fmt.Sprintf("%s %d", time.Month(d.month).String()[:3], d.day)
-	}
+	s := fmt.Sprintf("%s %d", time.Month(d.month).String()[:3], d.day)
 	if d.year == time.Now().Year() {
 		return s
-	}
-	if IsSimplifiedChinese() {
-		return fmt.Sprintf("%d年%s", d.year, s)
 	}
 	return fmt.Sprintf("%s, %d", s, d.year)
 }
@@ -183,50 +173,28 @@ func (d *Date) NextRepeat(r Repeat) *Date {
 }
 
 func (d *Date) ShortText() string {
-	if conv.Abs(d.t.Sub(time.Now())) <= 2*Day {
-		if IsSimplifiedChinese() {
-			switch {
-			case d.IsYesterday():
-				return "昨天"
-			case d.IsToday():
-				return "今天"
-			case d.IsTomorrow():
-				return "明天"
-			}
-		} else {
-			switch {
-			case d.IsYesterday():
-				return "Yesterday"
-			case d.IsToday():
-				return "Today"
-			case d.IsTomorrow():
-				return "Tomorrow"
-			}
+	if abs(d.t.Sub(time.Now())) <= 2*Day {
+		switch {
+		case d.IsYesterday():
+			return Localize("Yesterday")
+		case d.IsToday():
+			return Localize("Today")
+		case d.IsTomorrow():
+			return Localize("Tomorrow")
 		}
 	}
 	return fmt.Sprintf("%s %s", GetWeekdaySymbol(d.weekday), d.PrettyText())
 }
 
 func (d *Date) LongText() string {
-	if conv.Abs(d.t.Sub(time.Now())) <= 2*Day {
-		if IsSimplifiedChinese() {
-			switch {
-			case d.IsYesterday():
-				return "昨天 " + d.PrettyText()
-			case d.IsToday():
-				return "今天 " + d.PrettyText()
-			case d.IsTomorrow():
-				return "明天 " + d.PrettyText()
-			}
-		} else {
-			switch {
-			case d.IsYesterday():
-				return "Yesterday " + d.PrettyText()
-			case d.IsToday():
-				return "Today " + d.PrettyText()
-			case d.IsTomorrow():
-				return "Tomorrow " + d.PrettyText()
-			}
+	if abs(d.t.Sub(time.Now())) <= 2*Day {
+		switch {
+		case d.IsYesterday():
+			return Localize("Yesterday") + " " + d.PrettyText()
+		case d.IsToday():
+			return Localize("Today") + " " + d.PrettyText()
+		case d.IsTomorrow():
+			return Localize("Tomorrow") + " " + d.PrettyText()
 		}
 	}
 	return fmt.Sprintf("%s %s", GetWeekdaySymbol(d.weekday), d.PrettyText())

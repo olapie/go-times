@@ -1,11 +1,7 @@
-package timex_test
+package times
 
 import (
-	"fmt"
 	"testing"
-
-	"code.olapie.com/timex"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestLenOfMonth(t *testing.T) {
@@ -82,6 +78,9 @@ func TestLenOfMonth(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		assert.Equal(t, test.Len, timex.NewMonth(test.Year, test.Month).NumOfDays(), fmt.Sprintf("%v", test))
+		got := NewMonth(test.Year, test.Month).NumOfDays()
+		if test.Len != got {
+			t.Errorf("%v expect: %v, got %v", test, test.Len, got)
+		}
 	}
 }
