@@ -84,3 +84,8 @@ func TestLenOfMonth(t *testing.T) {
 		}
 	}
 }
+
+func TestToTimerText(t *testing.T) {
+	t.Log(ToTimerText(10))
+	t.Log(ToTimerText(3600*9 + 60*20 + 37))
+}

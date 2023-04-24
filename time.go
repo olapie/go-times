@@ -1,6 +1,7 @@
 package times
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -40,6 +41,16 @@ func BeginOfDay(t time.Time) time.Time {
 
 func EndOfDay(t time.Time) time.Time {
 	return time.Date(t.Year(), t.Month(), t.Day(), 23, 59, 59, 999999999, time.Local)
+}
+
+func ToTimerText(seconds int64) string {
+	h := seconds / 3600
+	m := (seconds % 3600) / 60
+	s := seconds % 60
+	if h < 100 {
+		return fmt.Sprintf("%02d:%02d:%02d", h, m, s)
+	}
+	return fmt.Sprintf("%d:%02d:%02d", h, m, s)
 }
 
 const (
