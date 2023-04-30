@@ -46,7 +46,11 @@ func SetLang(s string) error {
 	global.Language = t.String()
 	switch {
 	case t == language.Chinese:
+		fallthrough
+	case t == language.SimplifiedChinese, t.Parent() == language.SimplifiedChinese:
 		global.PrimaryLanguage = language.SimplifiedChinese.String()
+	case t == language.TraditionalChinese, t.Parent() == language.TraditionalChinese:
+		global.PrimaryLanguage = language.TraditionalChinese.String()
 	case t.Parent() == language.Chinese:
 		script, _ := t.Script()
 		hans, _ := language.SimplifiedChinese.Script()
@@ -55,9 +59,10 @@ func SetLang(s string) error {
 		} else {
 			global.PrimaryLanguage = language.TraditionalChinese.String()
 		}
-	case t == language.English || t.Parent() == language.English:
+	case t == language.English, t.Parent() == language.English:
 		global.PrimaryLanguage = language.English.String()
 	}
+	fmt.Printf("SetLang: input=%s, result=%s,%s\n", s, global.Language, global.PrimaryLanguage)
 	return nil
 }
 
@@ -154,5 +159,5 @@ func IsSimplifiedChinese() bool {
 }
 
 func IsTraditionalChinese() bool {
-	return global.PrimaryLanguage == language.SimplifiedChinese.String()
+	return global.PrimaryLanguage == language.TraditionalChinese.String()
 }
