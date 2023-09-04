@@ -53,6 +53,22 @@ func ToTimerText(seconds int64) string {
 	return fmt.Sprintf("%d:%02d:%02d", h, m, s)
 }
 
+func UnixSecP(sec *int64) *time.Time {
+	if sec == nil {
+		return nil
+	}
+	t := time.Unix(*sec, 0)
+	return &t
+}
+
+func ToUnixSecP(t *time.Time) *int64 {
+	if t == nil {
+		return nil
+	}
+	sec := int64(t.Second())
+	return &sec
+}
+
 const (
 	Day  = 24 * time.Hour
 	Week = 7 * 24 * time.Hour
