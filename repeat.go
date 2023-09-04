@@ -7,7 +7,9 @@ const (
 	Never Repeat = iota
 	Daily
 	Weekly
+	BiWeekly
 	Monthly
+	Quarterly
 	Yearly
 )
 
