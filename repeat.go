@@ -24,25 +24,32 @@ func (r Repeat) IsValid() bool {
 	}
 }
 
-func RepeatSchedule(repeat Repeat, initialStart time.Time, before time.Time) []time.Time {
+func RepeatSchedule(repeat Repeat, start time.Time, before time.Time) []time.Time {
 	var res []time.Time
-	t := initialStart
+	t := start
 	for t.Before(before) {
 		res = append(res, t)
-		switch repeat {
-		case Daily:
-			t = t.AddDate(0, 0, 1)
-		case Weekly:
-			t = t.AddDate(0, 0, 7)
-		case Monthly:
-			t = t.AddDate(0, 1, 0)
-		case Quarterly:
-			t = t.AddDate(0, 3, 0)
-		case Yearly:
-			t = t.AddDate(1, 0, 0)
-		default:
+		if repeat == Never {
 			return res
 		}
+		t = RepeatNext(repeat, t)
 	}
 	return res
+}
+
+func RepeatNext(repeat Repeat, start time.Time) time.Time {
+	switch repeat {
+	case Daily:
+		return start.AddDate(0, 0, 1)
+	case Weekly:
+		return start.AddDate(0, 0, 7)
+	case Monthly:
+		return start.AddDate(0, 1, 0)
+	case Quarterly:
+		return start.AddDate(0, 3, 0)
+	case Yearly:
+		return start.AddDate(1, 0, 0)
+	default:
+		panic("never repeat")
+	}
 }
