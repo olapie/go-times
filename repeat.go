@@ -1,6 +1,9 @@
 package times
 
-import "time"
+import (
+	"fmt"
+	"time"
+)
 
 //go:generate stringer -type Repeat
 type Repeat int
@@ -43,6 +46,8 @@ func RepeatNext(repeat Repeat, start time.Time) time.Time {
 		return start.AddDate(0, 0, 1)
 	case Weekly:
 		return start.AddDate(0, 0, 7)
+	case BiWeekly:
+		return start.AddDate(0, 0, 14)
 	case Monthly:
 		return start.AddDate(0, 1, 0)
 	case Quarterly:
@@ -50,6 +55,6 @@ func RepeatNext(repeat Repeat, start time.Time) time.Time {
 	case Yearly:
 		return start.AddDate(1, 0, 0)
 	default:
-		panic("never repeat")
+		panic(fmt.Sprintf("invalid repeat %d: %v", repeat, repeat))
 	}
 }
