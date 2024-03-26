@@ -2,6 +2,7 @@ package times
 
 import (
 	"testing"
+	"time"
 )
 
 func TestLenOfMonth(t *testing.T) {
@@ -88,4 +89,10 @@ func TestLenOfMonth(t *testing.T) {
 func TestToTimerText(t *testing.T) {
 	t.Log(ToTimerText(10))
 	t.Log(ToTimerText(3600*9 + 60*20 + 37))
+}
+
+func TestRepeatSchedule(t *testing.T) {
+	start := time.Date(2025, time.January, 2, 0, 0, 0, 0, time.Local)
+	t.Log(start, start.Weekday())
+	t.Log(RepeatSchedule(Weekly, start, time.Now().AddDate(2, 0, 0)))
 }
