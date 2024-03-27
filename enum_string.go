@@ -11,18 +11,20 @@ func _() {
 	_ = x[TimespanSecond-0]
 	_ = x[TimespanMinute-1]
 	_ = x[TimespanHour-2]
-	_ = x[TimespanWeek-3]
-	_ = x[TimespanBiWeek-4]
-	_ = x[TimespanMonth-5]
-	_ = x[TimespanBiMonth-6]
-	_ = x[TimespanQuarter-7]
-	_ = x[TimespanHalfYear-8]
-	_ = x[TimespanYear-9]
+	_ = x[TimespanDay-3]
+	_ = x[TimespanWeek-4]
+	_ = x[TimespanBiWeek-5]
+	_ = x[TimespanMonth-6]
+	_ = x[TimespanBiMonth-7]
+	_ = x[TimespanQuarter-8]
+	_ = x[TimespanHalfYear-9]
+	_ = x[TimespanYear-10]
+	_ = x[_TimespanCount-11]
 }
 
-const _Timespan_name = "SecondMinuteHourWeekBiWeekMonthBiMonthQuarterHalfYearYear"
+const _Timespan_name = "SecondMinuteHourDayWeekBiWeekMonthBiMonthQuarterHalfYearYear_TimespanCount"
 
-var _Timespan_index = [...]uint8{0, 6, 12, 16, 20, 26, 31, 38, 45, 53, 57}
+var _Timespan_index = [...]uint8{0, 6, 12, 16, 19, 23, 29, 34, 41, 48, 56, 60, 74}
 
 func (i Timespan) String() string {
 	if i < 0 || i >= Timespan(len(_Timespan_index)-1) {
@@ -41,11 +43,12 @@ func _() {
 	_ = x[Monthly-4]
 	_ = x[Quarterly-5]
 	_ = x[Yearly-6]
+	_ = x[_RepeatCount-7]
 }
 
-const _Repeat_name = "NeverDailyWeeklyBiWeeklyMonthlyQuarterlyYearly"
+const _Repeat_name = "NeverDailyWeeklyBiWeeklyMonthlyQuarterlyYearly_RepeatCount"
 
-var _Repeat_index = [...]uint8{0, 5, 10, 16, 24, 31, 40, 46}
+var _Repeat_index = [...]uint8{0, 5, 10, 16, 24, 31, 40, 46, 58}
 
 func (i Repeat) String() string {
 	if i < 0 || i >= Repeat(len(_Repeat_index)-1) {

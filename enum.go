@@ -7,6 +7,7 @@ const (
 	TimespanSecond Timespan = iota
 	TimespanMinute
 	TimespanHour
+	TimespanDay
 	TimespanWeek
 	TimespanBiWeek
 	TimespanMonth
